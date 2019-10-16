@@ -3,7 +3,7 @@ import {AdminPoolService} from './admin-pool.service';
 import {Route} from '@angular/router';
 
 export class Admin {
-    constructor(private pool: AdminPoolService, private config: AdminConfig) {}
+    constructor(private pool: AdminPoolService, public config: AdminConfig) {}
 
     name: string;
     route: Route;
@@ -24,5 +24,13 @@ export class Admin {
         }
 
         return this.route;
+    }
+
+    getAbsoluteUrl(): string {
+        return this.pool.getAbsoluteRootUrl() + '/' + this.getUrl();
+    }
+
+    getUrl(): string {
+        return this.config.path;
     }
 }

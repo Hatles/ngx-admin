@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {AdminComponent} from './admin.component';
 import {AdminsConfig} from '../../admin/core/adminConfig';
 import {RouterModule, Routes} from '@angular/router';
-import {GeneralComponent} from '../general/general.component';
 
 const admins: AdminsConfig = {
     path: 'adminconfig',
@@ -25,7 +24,7 @@ const routes: Routes = [
     {
         path: '',
         data: {addDynamicChild: true},
-        component: GeneralComponent,
+        component: AdminComponent,
     }
 ];
 
@@ -35,6 +34,7 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
     providers: [],
+    declarations: [],
     entryComponents: []
 })
 export class AdminRoutingModule {

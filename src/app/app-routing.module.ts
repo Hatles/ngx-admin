@@ -7,6 +7,7 @@ import {MainComponent} from './main/main.component';
 import {DynamicComponent} from './dynamic/dynamic.component';
 import {AdminModule} from './admin/core/admin.module';
 import {AdminComponent} from './modules/admin/admin.component';
+import {dataRouteFinder} from './admin/core/dataRouteFinder';
 
 const routes: Routes = [
     {
@@ -15,6 +16,7 @@ const routes: Routes = [
             {path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule)},
         ]
     },
+    {path: 'dyn/:id', component: NotFoundComponent},
     {path: '404', component: NotFoundComponent},
     {path: '**', canActivate: [DynamicPathGuard], component: NotFoundComponent},
 ];
@@ -29,13 +31,14 @@ const routes: Routes = [
         ),
         AdminModule.fotRoot(),
         AdminModule.withConfig({
-            rootPath: '',
-            path: 'adminconfig',
+            rootFinder: dataRouteFinder('adminRoot'),
+            path: 'adminroot',
             data: {title: 'test'},
             component: DynamicComponent,
             admins: [
                 // {
                 //     name: 'test',
+                //     path: 'test',
                 //     actions: [
                 //         {
                 //             name: 'view'
@@ -43,7 +46,9 @@ const routes: Routes = [
                 //     ],
                 //     defaultActionName: 'view'
                 // }
-            ]
+            ],
+            // defaultAdminName: 'test',
+            wildcardRedirectToAdminRoot: true
         }),
     ],
     exports: [RouterModule],
