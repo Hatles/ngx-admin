@@ -5,11 +5,13 @@ import {NotFoundComponent} from './notfound/not-found.component';
 import {DynamicPathGuard} from './guards/dynamic-path.guard';
 import {MainComponent} from './main/main.component';
 import {DynamicComponent} from './dynamic/dynamic.component';
+import {AdminModule} from './admin/core/admin.module';
+import {AdminComponent} from './modules/admin/admin.component';
 
 const routes: Routes = [
     {
         path: '', component: MainComponent, children: [
-            {path: 'general', loadChildren: () => import('./modules/general/general.module').then(m => m.GeneralModule)},
+            // {path: 'general', loadChildren: () => import('./modules/general/general.module').then(m => m.GeneralModule)},
             {path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule)},
         ]
     },
@@ -18,13 +20,35 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(
-        routes,
-        {
-            preloadingStrategy: PreloadAllModules
-        }
-    )],
-    exports: [RouterModule]
+    imports: [
+        RouterModule.forRoot(
+            routes,
+            {
+                preloadingStrategy: PreloadAllModules
+            }
+        ),
+        AdminModule.fotRoot(),
+        AdminModule.withConfig({
+            rootPath: '',
+            path: 'adminconfig',
+            data: {title: 'test'},
+            component: DynamicComponent,
+            admins: [
+                // {
+                //     name: 'test',
+                //     actions: [
+                //         {
+                //             name: 'view'
+                //         }
+                //     ],
+                //     defaultActionName: 'view'
+                // }
+            ]
+        }),
+    ],
+    exports: [RouterModule],
+    declarations: [DynamicComponent],
+    entryComponents: [DynamicComponent]
 })
 export class AppRoutingModule {
 

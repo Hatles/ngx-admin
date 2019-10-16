@@ -11,6 +11,10 @@ import {Component, OnInit} from '@angular/core';
             <button>Navigate To Admin Module
             </button>
         </a>
+        <a [routerLink]="['/adminconfig']">
+            <button>Navigate To Admin Module
+            </button>
+        </a>
         <hr>
         <router-outlet></router-outlet>
     `
