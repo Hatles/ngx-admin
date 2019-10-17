@@ -1,41 +1,63 @@
-import {NgModule} from '@angular/core';
-import {AdminComponent} from './admin.component';
+import {NgModule, Type} from '@angular/core';
 import {AdminsConfig} from '../../admin/core/adminConfig';
-import {RouterModule, Routes} from '@angular/router';
+import {AdminModule} from '../../admin/core/admin.module';
+import {AdminRootComponent} from './components/admin-root/admin-root.component';
+import {AdminBaseComponent} from './components/admin-base/admin-base.component';
+import {AdminActionBaseComponent} from './components/admin-action-base/admin-action-base.component';
+import {AdminDashboardBaseComponent} from './components/admin-dashboard-base/admin-dashboard-base.component';
+import {AdminPoolService} from '../../admin/core/admin-pool.service';
+import {RouteConfigLoadEnd, Router} from '@angular/router';
+
+const adminComponents: Type<any>[] = [
+    AdminRootComponent,
+    AdminDashboardBaseComponent,
+    AdminBaseComponent,
+    AdminActionBaseComponent
+];
 
 const admins: AdminsConfig = {
     path: 'adminconfig',
-    data: {isAdminModule: true},
-    component: AdminComponent,
+    data: {},
+    component: AdminRootComponent,
     admins: [
-        {
-            name: 'test',
-            actions: [
-                {
-                    name: 'view'
-                }
-            ],
-            defaultActionName: 'view'
-        }
+        // {
+        //     name: 'dashboard',
+        //     path: '',
+        //     component: AdminDashboardBaseComponent
+        // },
+        // {
+        //     name: 'test',
+        //     path: 'test',
+        //     component: AdminBaseComponent,
+        //     actions: [
+        //         {
+        //             name: 'view',
+        //             path: 'view',
+        //             component: AdminActionBaseComponent
+        //         }
+        //     ],
+        //     defaultActionName: 'view'
+        // }
     ]
 };
-
-const routes: Routes = [
-    {
-        path: '',
-        data: {addDynamicChild: true},
-        component: AdminComponent,
-    }
-];
 
 @NgModule({
     // imports: [AdminModule.withConfig(admins)],
     // exports: [AdminModule],
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+    // imports: [AdminModule.withConfig(admins)],
+    imports: [AdminModule],
+    exports: [AdminModule],
     providers: [],
-    declarations: [],
-    entryComponents: []
+    declarations: [adminComponents],
+    entryComponents: [adminComponents]
 })
 export class AdminRoutingModule {
+    constructor(private router: Router, pool: AdminPoolService) {
+        this.router.events.subscribe(async routerEvent => {
+
+            if (routerEvent instanceof RouteConfigLoadEnd) {
+                pool.buildAdmins(router, admins);
+            }
+        });
+    }
 }

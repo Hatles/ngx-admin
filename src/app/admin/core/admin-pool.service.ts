@@ -23,6 +23,7 @@ export class AdminPoolService {
     }
 
     buildAdmins(router: Router, adminsConfig: AdminsConfig) {
+        this.router = router;
         this.admins = [];
         this.adminsConfig = adminsConfig;
         const admins = adminsConfig.admins.map((admin) => this.buildAdmin(admin));
@@ -31,7 +32,7 @@ export class AdminPoolService {
         this.buildAdminsRoute(adminRoutes);
     }
 
-    buildAdmin(config: AdminConfig): Admin {
+    private buildAdmin(config: AdminConfig): Admin {
         const admin = new Admin(this, config);
         this.admins.push({
             admin: admin,
@@ -41,7 +42,7 @@ export class AdminPoolService {
         return admin;
     }
 
-    buildAdminRoute(admin: Admin): Route {
+    private buildAdminRoute(admin: Admin): Route {
         return admin.getRoute();
     }
 
@@ -67,7 +68,10 @@ export class AdminPoolService {
         // Add admins routes
         route.children = [...adminRoutes, ...route.children];
 
-        this.router = this.injector.get(Router);
+        if (!this.router) {
+            this.router = this.injector.get(Router);
+        }
+
         const routerConfig = [...this.router.config];
 
         let root = this.getRootRoute(routerConfig);
@@ -165,7 +169,7 @@ export class AdminPoolService {
         };
     }
 
-    public getAbsoluteRootUrl(): string {
+    getAbsoluteRootUrl(): string {
         return this.rootRoute.url;
     }
 }

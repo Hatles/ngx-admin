@@ -10,11 +10,11 @@ export interface AdminsConfig extends Route {
     defaultRoutePath?: string;
     defaultAdminName?: string;
     wildcardRoute?: Route;
-    wildcardRedirectToAdminRoot: boolean;
+    wildcardRedirectToAdminRoot?: boolean;
 }
 
 export interface AdminConfig extends Route {
     name: string;
-    defaultActionName: string;
-    actions: AdminAction[];
+    defaultActionName?: string;
+    actions?: AdminAction[];
 }
