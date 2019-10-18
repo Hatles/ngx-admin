@@ -18,7 +18,7 @@ export function routeWithParentToUrl(routeWithParent: RouteWithParent): RouteWit
         url = removePostFix(currentRoute.route.path, '/') + '/' + removePreFix(url, '/');
         currentRoute = currentRoute.parent;
     }
-    url = '/' + url;
+    url = '/' + removePostFix(url, '/');
 
     return {
         route: routeWithParent.route,

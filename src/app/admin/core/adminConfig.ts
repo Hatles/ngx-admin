@@ -1,7 +1,7 @@
 import {Route} from '@angular/router';
 import {AdminAction} from './adminAction';
 
-export type RouteFinder = (Route) => boolean;
+export type RouteFinder = (route: Route) => boolean;
 
 export interface AdminsConfig extends Route {
     admins: AdminConfig[];

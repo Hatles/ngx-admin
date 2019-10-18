@@ -6,12 +6,16 @@ import {DynamicPathGuard} from './guards/dynamic-path.guard';
 import {MainComponent} from './main/main.component';
 import {DynamicComponent} from './dynamic/dynamic.component';
 import {AdminModule} from './admin/core/admin.module';
+import {buildAdminRootByData} from './admin/core/buildAdminRootWithData';
 
 const routes: Routes = [
     {
         path: '', component: MainComponent, children: [
             {path: 'general', loadChildren: () => import('./modules/general/general.module').then(m => m.GeneralModule)},
-            {path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule)},
+            buildAdminRootByData(
+                {path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule)},
+                'admin'
+            ),
         ]
     },
     {path: '404', component: NotFoundComponent},

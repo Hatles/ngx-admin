@@ -101,8 +101,11 @@ export class AdminPoolService {
         if (!root.route.children) {
             root.route.children = [];
         }
+        if (!root.route.loadChildren) {
+            // todo remove this
+            root.route.loadChildren = undefined;
+        }
         if (route.path !== '') {
-
             root.url = removePostFix(root.url, '/') + '/' + removePreFix(route.path, '/');
         }
         this.rootRoute = root;
@@ -138,7 +141,7 @@ export class AdminPoolService {
         if (this.adminsConfig.rootFinder) {
             while (routesQueue.length) {
                 const route = routesQueue.shift();
-                if (this.adminsConfig.rootFinder(route)) {
+                if (this.adminsConfig.rootFinder(route.route)) {
                     return routeWithParentToUrl(route);
                 } else if (route.route.children) {
                     routesQueue.push(...route.route.children.map(r => ({route: r, parent: route})));
